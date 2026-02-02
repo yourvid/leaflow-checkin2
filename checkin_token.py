@@ -94,7 +94,7 @@ class LeafLowTokenCheckin:
             ]
             
             for url in test_urls:
-                response = session.get(url, timeout=30)
+                response = session.get(url, timeout=180)
                 self.logger.debug(f"[{account_name}] Test {url}: {response.status_code}")
                 
                 if response.status_code == 200:
@@ -119,7 +119,7 @@ class LeafLowTokenCheckin:
         
         try:
             # 方法1: 直接访问签到页面
-            response = session.get(self.checkin_url, timeout=30)
+            response = session.get(self.checkin_url, timeout=180)
             
             if response.status_code == 200:
                 result = self.analyze_and_checkin(session, response.text, self.checkin_url, account_name)
@@ -137,14 +137,14 @@ class LeafLowTokenCheckin:
             for endpoint in api_endpoints:
                 try:
                     # GET请求
-                    response = session.get(endpoint, timeout=30)
+                    response = session.get(endpoint, timeout=180)
                     if response.status_code == 200:
                         success, message = self.check_checkin_response(response.text)
                         if success:
                             return True, message
                     
                     # POST请求
-                    response = session.post(endpoint, data={'checkin': '1'}, timeout=30)
+                    response = session.post(endpoint, data={'checkin': '1'}, timeout=180)
                     if response.status_code == 200:
                         success, message = self.check_checkin_response(response.text)
                         if success:
@@ -179,7 +179,7 @@ class LeafLowTokenCheckin:
                 checkin_data['_token'] = csrf_token
                 checkin_data['csrf_token'] = csrf_token
             
-            response = session.post(page_url, data=checkin_data, timeout=30)
+            response = session.post(page_url, data=checkin_data, timeout=180)
             
             if response.status_code == 200:
                 return self.check_checkin_response(response.text)
@@ -369,3 +369,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
